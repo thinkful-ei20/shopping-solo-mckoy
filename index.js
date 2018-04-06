@@ -6,10 +6,6 @@ const STORE = [
   {name: 'bread', checked: false}
 ];
 
-function check$(){
-  console.log('jQuery, the notorious $, is available for use.');
-}
-
 function createDOMItem(item, index){
   // creates an li element with item's name, buttons, classes, and attributes dubbed DOMItem
   return `
@@ -37,9 +33,8 @@ function renderShoppingList(){
   const DOMList = createDOMList(STORE);
   $('.js-shopping-list').html(DOMList);
 }
-function getNewItem() {
-  return $('.js-shopping-list-entry').val();
-}
+const getNewItem = () => $('.js-shopping-list-entry').val();
+
 function emptyForm(){
   $('.js-shopping-list-entry').val(''); 
 }
@@ -53,27 +48,51 @@ function addItem(){
 function handleAddingItems(){
   // an item provided by user should be added to shopping list
   console.log('`handleAddingItems` ran like a charm.');
-  $('#js-shopping-list-form').submit(function(event){
+  $('#js-shopping-list-form').submit( (event) => {
     event.preventDefault();
+    console.log('`submit button` worked like a charm');
     addItem();
   });
 }
 
-function checkItem(){
-  // an item (with button, 'check') should be able to be checked
+function handleCheckingItems(){
+  // an item should be able to be checked
   console.log('`checkItem` ran like a charm');
+  $('.js-shopping-list').on('click', '.js-item-toggle', (event) => {
+    const itemIndex = $(this).closest('.js-item-index-element').attr('data-item-index');
+    STORE[itemIndex].checked = !STORE[itemIndex].checked;
+    renderShoppingList();
+  });
 }
 
-function deleteItem(){
+function handleDeletingItems(){
   // an item (with button, 'delete') should be able to be deleted
   console.log('`deleteItem` ran like a charm');
+  $('.js-shopping-list').on('click', '.js-item-delete', (event) => {
+    const itemIndex = $(this).closest('.js-item-index-element').attr('data-item-index');
+    STORE.splice(itemIndex, 1);
+    renderShoppingList();
+  });
+}
+
+function deleteItem(itemIndex){
+  STORE.splice(itemIndex, 1);
+}
+
+function deleteOrCheckItem(type, storeFn){
+  // an item (with button, 'delete') should be able to be deleted
+  console.log('`deleteItem` ran like a charm');
+  $('.js-shopping-list').on('click', type, (event) => {
+    const itemIndex = $(this).closest('.js-item-index-element').attr('data-item-index');
+    deleteItem(itemIndex);
+    renderShoppingList();
+  });
 }
 
 function handleShoppingList(){
-  check$();
   renderShoppingList();
   handleAddingItems();
-  checkItem();
+  handleCheckingItems();
   deleteItem();
 }
 
