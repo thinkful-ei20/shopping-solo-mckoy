@@ -1,4 +1,11 @@
 'use strict';
+const STORE = [
+  {name: 'apples', checked: false},
+  {name: 'oranges', checked: false},
+  {name: 'milk', checked: true},
+  {name: 'bread', checked: false}
+];
+
 function check$(){
   console.log('jQuery, the notorious $, is available for use.');
 }
