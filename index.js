@@ -10,13 +10,24 @@ function check$(){
   console.log('jQuery, the notorious $, is available for use.');
 }
 
-function createDOMList(arr) {
+function createDOMItem(item, index){
   return `
-  <li>${arr[0].name}</li>
-  <li>${arr[1].name}</li>
-  <li>${arr[2].name}</li>
-  <li>${arr[3].name}</li>
+  <li class="js-item-index-element" data-item-index="${index}">
+    <span class="shopping-item js-shopping-item ${item.checked ? 'shopping-item__checked' : ''}">${item.name}</span>
+    <div class="shopping-item-controls">
+      <button class="shopping-item-toggle js-item-toggle">
+        <span class="button-label">check</span>
+      </button>
+      <button class="shopping-item-delete js-item-delete">
+        <span class="button-label">delete</span>
+      </button>
+    </div>
+  </li>
   `;
+}
+
+function createDOMList(arr) {
+  return arr.map((item, index) => createDOMItem(item, index)).join('');
 }
 function renderShoppingList(){
   // shopping list should be rendered to the page
