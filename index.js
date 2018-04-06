@@ -11,6 +11,7 @@ function check$(){
 }
 
 function createDOMItem(item, index){
+  // creates an li element with item's name, buttons, classes, and attributes dubbed DOMItem
   return `
   <li class="js-item-index-element" data-item-index="${index}">
     <span class="shopping-item js-shopping-item ${item.checked ? 'shopping-item__checked' : ''}">${item.name}</span>
@@ -27,18 +28,35 @@ function createDOMItem(item, index){
 }
 
 function createDOMList(arr) {
+  // maps through the array and creates a DOMItem for each item
   return arr.map((item, index) => createDOMItem(item, index)).join('');
 }
 function renderShoppingList(){
-  // shopping list should be rendered to the page
+  // shopping list will be rendered to the page
   console.log('`renderShoppingList` ran like a charm.');
   const DOMList = createDOMList(STORE);
   $('.js-shopping-list').html(DOMList);
 }
-
+function getNewItem() {
+  return $('.js-shopping-list-entry').val();
+}
+function emptyForm(){
+  $('.js-shopping-list-entry').val(''); 
+}
 function addItem(){
-  // an item provided by user should be added to shopping list
   console.log('`addItem` ran like a charm.');
+  STORE.push({name: getNewItem(), checked: false});
+  renderShoppingList();
+  emptyForm();
+}
+
+function handleAddingItems(){
+  // an item provided by user should be added to shopping list
+  console.log('`handleAddingItems` ran like a charm.');
+  $('#js-shopping-list-form').submit(function(event){
+    event.preventDefault();
+    addItem();
+  });
 }
 
 function checkItem(){
@@ -54,7 +72,7 @@ function deleteItem(){
 function handleShoppingList(){
   check$();
   renderShoppingList();
-  addItem();
+  handleAddingItems();
   checkItem();
   deleteItem();
 }
