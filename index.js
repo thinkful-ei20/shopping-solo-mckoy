@@ -1,14 +1,14 @@
 'use strict';
+// USER STORY 1: RENDER SHOPPING LIST TO DOM
+// creates a startup shopping list
 const STORE = [
   {name: 'apples', checked: false},
   {name: 'oranges', checked: false},
   {name: 'milk', checked: true},
   {name: 'bread', checked: false}
 ];
-
-function createDOMItem(item, index){
-  // creates an li element with item's name, buttons, classes, and attributes dubbed DOMItem
-  return `
+// creates an li element with item's name, buttons, classes, and attributes dubbed DOMItem
+const createDOMItem = (item, index) => `
   <li class="js-item-index-element" data-item-index="${index}">
     <span class="shopping-item js-shopping-item ${item.checked ? 'shopping-item__checked' : ''}">${item.name}</span>
     <div class="shopping-item-controls">
@@ -19,84 +19,51 @@ function createDOMItem(item, index){
         <span class="button-label">delete</span>
       </button>
     </div>
-  </li>
-  `;
-}
+  </li>`;
+// maps through the array and creates a DOMItem for each item using `createDOMItem`
+const createDOMList = arr => arr.map((item, index) => createDOMItem(item, index)).join('');
+// renders shoppingList to the DOM using `createDOMList`
+const renderShoppingList= () => { $('.js-shopping-list').html(createDOMList(STORE));};
 
-function createDOMList(arr) {
-  // maps through the array and creates a DOMItem for each item
-  return arr.map((item, index) => createDOMItem(item, index)).join('');
-}
-function renderShoppingList(){
-  // shopping list will be rendered to the page
-  console.log('`renderShoppingList` ran like a charm.');
-  const DOMList = createDOMList(STORE);
-  $('.js-shopping-list').html(DOMList);
-}
+// USER STORY 2: ADD NEW SHOPPING LIST ITEM
+// gets new shoppingList submitted by user
 const getNewItem = () => $('.js-shopping-list-entry').val();
-
-function emptyForm(){
-  $('.js-shopping-list-entry').val(''); 
-}
-function addItem(){
-  console.log('`addItem` ran like a charm.');
-  STORE.push({name: getNewItem(), checked: false});
-  renderShoppingList();
-  emptyForm();
-}
-
-function handleAddingItems(){
-  // an item provided by user should be added to shopping list
-  console.log('`handleAddingItems` ran like a charm.');
+// empties the submit form
+const emptyForm = () => { $('.js-shopping-list-entry').val('');};
+// add new item to store
+const addItemToShoppingList = () => { STORE.push({name: getNewItem(), checked: false}); };
+// on clicking submit, an item provided by user is added to shopping list and rendered to the DOM
+const handleAddingItems = () => {
   $('#js-shopping-list-form').submit( (event) => {
     event.preventDefault();
-    console.log('`submit button` worked like a charm');
-    addItem();
+    addItemToShoppingList();
+    renderShoppingList();
+    emptyForm();
   });
-}
+};
 
-// function handleCheckingItems(){
-//   // an item should be able to be checked
-//   console.log('`checkItem` ran like a charm');
-//   $('.js-shopping-list').on('click', '.js-item-toggle', (event) => {
-//     const itemIndex = $(this).closest('.js-item-index-element').attr('data-item-index');
-//     STORE[itemIndex].checked = !STORE[itemIndex].checked;
-//     renderShoppingList();
-//   });
-// }
-
-// function handleDeletingItems(){
-//   // an item (with button, 'delete') should be able to be deleted
-//   console.log('`deleteItem` ran like a charm');
-//   $('.js-shopping-list').on('click', '.js-item-delete', (event) => {
-//     const itemIndex = $(this).closest('.js-item-index-element').attr('data-item-index');
-//     STORE.splice(itemIndex, 1);
-//     renderShoppingList();
-//   });
-// }
-
-// function deleteItem(itemIndex){
-//   STORE.splice(itemIndex, 1);
-// }
-
-const handleDeletingItems = () => deleteOrCheckItem('.js-item-delete', i => STORE.splice(i, 1))
-
-const handleCheckingItems = () => deleteOrCheckItem('.js-item-toggle', i => STORE[i].checked = !STORE[i].checked)
-
-const deleteOrCheckItem =(type, storeFn) => {
-  $('.js-shopping-list').on('click', type, (event) => {
-    const itemIndex = $(event.target).closest('.js-item-index-element')
-                             .data('item-index');
-    storeFn(itemIndex);
+// USER STORY 3 & 4: CHECK OR DELETE ITEMS
+// returns the index of a clicked item
+const findIndexOfItem = (event) => $(event.target).closest('.js-item-index-element').data('item-index');
+// deletes or checks and item from the list based on button clicked and parameters given then re-renders the list
+const checkOrDeleteItem = (typeOfButton, callbackFn) => {
+  $('.js-shopping-list').on('click', typeOfButton, (event) => { 
+    callbackFn(findIndexOfItem(event));
     renderShoppingList();
   });
-}
+};
+// if check button clicked, cross out the item
+const handleCheckingItems = () => checkOrDeleteItem('.js-item-toggle', index => STORE[index].checked = !STORE[index].checked);
+// if delete button clicked, delete the item
+const handleDeletingItems = () => checkOrDeleteItem('.js-item-delete', index => STORE.splice(index, 1));
 
-function handleShoppingList(){
+// handles all four USER STORIES
+const handleShoppingList = () => {
   renderShoppingList();
   handleAddingItems();
   handleCheckingItems();
   handleDeletingItems();
-}
+};
 
+// call handler when the DOM is ready
 $(handleShoppingList);
