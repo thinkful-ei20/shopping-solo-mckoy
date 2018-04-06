@@ -64,12 +64,21 @@ const handleCheckingItems = () => checkOrDeleteItem('.js-item-toggle', (database
 const handleDeletingItems = () => checkOrDeleteItem('.js-item-delete', (database, index) => 
   database.splice(index, 1));
 
+// USER STORY 5: User can press a switch/checkbox to toggle between displaying all items or unchecked items
+// makes a filtered shopping list
+//const filteredByUnchecked = () => ;
+
+const handleFilteringUncheckedItems= () => {
+  console.log('`handleFilteringUncheckedItems` working');
+};
+
   // Handles all four USER STORIES.
 const handleShoppingList = () => {
   renderShoppingList();
   handleAddingItems();
   handleCheckingItems();
   handleDeletingItems();
+  handleFilteringUncheckedItems();
 };
 
 // call handler when the DOM is ready
