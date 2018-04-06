@@ -67,32 +67,49 @@ const handleDeletingItems = () => checkWhichButton('.js-shopping-list', '.js-ite
   database.splice(index, 1));
 
 // USER STORY 5: User can press a switch/checkbox to toggle between displaying all items or unchecked items
-// makes a filtered shopping list
-
 const handleFilteringUncheckedItems= () => {
-  console.log('`handleFilteringUncheckedItems` working');
-  console.log(createDOMList( STORE.filterChecked() ));
-  $('.js-buttons').on('click', '.js-filter-unchecked', (event) => { 
-    console.log('`handleFilteringUncheckedItems` items button works!');
+  $('.js-buttons').on('click', '.js-filter-unchecked', () => { 
     renderShoppingList(STORE.filterChecked());
     $('.js-filter-unchecked').text('Show all items');
     $('.js-filter-unchecked').removeClass().addClass('js-filter-checked');
   });
-  $('.js-buttons').on('click', '.js-filter-checked', (event) => { 
-    console.log('`filter checked` items button works!');
+  $('.js-buttons').on('click', '.js-filter-checked', () => { 
     renderShoppingList(STORE.shoppingList);
     $('.js-filter-checked').text('Show unchecked items');
     $('.js-filter-checked').removeClass().addClass('js-filter-unchecked');
   });
 };
 
-const handleAdvanceSorting = () => {
-  $('.js-buttons').on('click', '.js-advanced-sort', (event) => { 
-    console.log('`handleAdvanceSorting` items button works!');
-  });
-}
+const createDOMForm = () => `
+  <div class="js-advanced-forms">
+    <form id="js-item-sort-form">
+      <input type="radio" name="sort" value="alpha" class="js-advanced-unchecked"> Show items alphabetically
+      <input type="radio" name="sort" value="deleted" class="js-advanced-unchecked"> Show deleted items
+    </form>
+    <form id="js-item-search-form">
+      <label for="shopping-list-entry">Search for an item</label>
+      <input type="text" name="shopping-list-entry" class="js-item-search-entry" placeholder="e.g., milk">
+      <button type="submit">Search</button>
+    </form>  
+  </div>
+`;
 
-  // Handles all four USER STORIES.
+const handleAdvanceSorting = () => {
+  $('.js-buttons').on('click', '.js-advanced-unchecked', (event) => { 
+    console.log('`handleAdvanceSorting` items button works!');
+    $(event.target).closest('.shopping-item-controls').append(createDOMForm);
+    $('.js-advanced-unchecked').find('.button-label').text('Clear advanced options');
+    $('.js-advanced-unchecked').removeClass().addClass('js-advanced-checked');
+  });
+  $('.js-buttons').on('click', '.js-advanced-checked', (event) => { 
+    console.log('`handleAdvanceSorting` items button works!');
+    $('.js-advanced-forms').remove();
+    $('.js-advanced-checked').find('.button-label').text('Advanced Options');
+    $('.js-advanced-checked').removeClass().addClass('js-advanced-unchecked');
+  });
+};
+
+// Handles all four USER STORIES.
 const handleShoppingList = () => {
   renderShoppingList(STORE.shoppingList);
   handleAddingItems();
