@@ -55,36 +55,39 @@ function handleAddingItems(){
   });
 }
 
-function handleCheckingItems(){
-  // an item should be able to be checked
-  console.log('`checkItem` ran like a charm');
-  $('.js-shopping-list').on('click', '.js-item-toggle', (event) => {
-    const itemIndex = $(this).closest('.js-item-index-element').attr('data-item-index');
-    STORE[itemIndex].checked = !STORE[itemIndex].checked;
-    renderShoppingList();
-  });
-}
+// function handleCheckingItems(){
+//   // an item should be able to be checked
+//   console.log('`checkItem` ran like a charm');
+//   $('.js-shopping-list').on('click', '.js-item-toggle', (event) => {
+//     const itemIndex = $(this).closest('.js-item-index-element').attr('data-item-index');
+//     STORE[itemIndex].checked = !STORE[itemIndex].checked;
+//     renderShoppingList();
+//   });
+// }
 
-function handleDeletingItems(){
-  // an item (with button, 'delete') should be able to be deleted
-  console.log('`deleteItem` ran like a charm');
-  $('.js-shopping-list').on('click', '.js-item-delete', (event) => {
-    const itemIndex = $(this).closest('.js-item-index-element').attr('data-item-index');
-    STORE.splice(itemIndex, 1);
-    renderShoppingList();
-  });
-}
+// function handleDeletingItems(){
+//   // an item (with button, 'delete') should be able to be deleted
+//   console.log('`deleteItem` ran like a charm');
+//   $('.js-shopping-list').on('click', '.js-item-delete', (event) => {
+//     const itemIndex = $(this).closest('.js-item-index-element').attr('data-item-index');
+//     STORE.splice(itemIndex, 1);
+//     renderShoppingList();
+//   });
+// }
 
-function deleteItem(itemIndex){
-  STORE.splice(itemIndex, 1);
-}
+// function deleteItem(itemIndex){
+//   STORE.splice(itemIndex, 1);
+// }
 
-function deleteOrCheckItem(type, storeFn){
-  // an item (with button, 'delete') should be able to be deleted
-  console.log('`deleteItem` ran like a charm');
+const handleDeletingItems = () => deleteOrCheckItem('.js-item-delete', i => STORE.splice(i, 1))
+
+const handleCheckingItems = () => deleteOrCheckItem('.js-item-toggle', i => STORE[i].checked = !STORE[i].checked)
+
+const deleteOrCheckItem =(type, storeFn) => {
   $('.js-shopping-list').on('click', type, (event) => {
-    const itemIndex = $(this).closest('.js-item-index-element').attr('data-item-index');
-    deleteItem(itemIndex);
+    const itemIndex = $(event.target).closest('.js-item-index-element')
+                             .data('item-index');
+    storeFn(itemIndex);
     renderShoppingList();
   });
 }
@@ -93,7 +96,7 @@ function handleShoppingList(){
   renderShoppingList();
   handleAddingItems();
   handleCheckingItems();
-  deleteItem();
+  handleDeletingItems();
 }
 
 $(handleShoppingList);
