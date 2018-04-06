@@ -16,16 +16,19 @@
             <input type="text" name="shopping-list-entry" class="js-shopping-list-entry" placeholder="e.g., broccoli">
             <button type="submit">Add item</button>
         </form>
-        <div class="shopping-item-controls">
-            <button class="shopping-item-toggle js-filter-unchecked">
-              <span class="button-label">Show unchecked items</span>
-            </button>
+        <div class="js-buttons">
+            <div class="shopping-item-controls">
+                <button class="shopping-item-toggle js-filter-unchecked">
+                    <span class="button-label">Show unchecked items</span>
+                </button>
+            </div>
+            <div class="shopping-item-controls">
+                <button class="shopping-item-toggle js-advanced-sort">
+                  <span class="button-label">Advanced Sort</span>
+                </button>
+            </div>
         </div>
-        <div class="shopping-item-controls">
-            <button class="shopping-item-toggle js-filter-unchecked">
-              <span class="button-label">Advanced Sort</span>
-            </button>
-        </div>
+
         <ul class="shopping-list js-shopping-list">
         </ul>
     </div>

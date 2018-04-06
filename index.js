@@ -28,7 +28,7 @@ const createDOMItem = (item, index) => `
 // Maps through the shopping list and creates a DOMItem for each item.
 const createDOMList = arr => arr.map((item, index) => createDOMItem(item, index)).join('');
 // Renders shopping list to the DOM using `createDOMList`.
-const renderShoppingList= () => { $('.js-shopping-list').html(createDOMList(STORE.shoppingList));};
+const renderShoppingList= arr => { $('.js-shopping-list').html(createDOMList(arr));};
 
 // USER STORY 2: ADD NEW SHOPPING LIST ITEM
 // Gets new shopping list item submitted by user.
@@ -42,7 +42,7 @@ const handleAddingItems = () => {
   $('#js-shopping-list-form').submit( (event) => {
     event.preventDefault();
     addItemToShoppingList(STORE.shoppingList);
-    renderShoppingList();
+    renderShoppingList(STORE.shoppingList);
     emptyForm();
   });
 };
@@ -51,34 +51,47 @@ const handleAddingItems = () => {
 // Returns the index of a clicked item
 const findIndexOfItem = event => $(event.target).closest('.js-item-index-element').data('itemIndex');
 // Listen for clicks on check or delete button then re-renders the shopping list to the DOM
-const checkOrDeleteItem = (typeOfButton, callbackFn) => {
-  $('.js-shopping-list').on('click', typeOfButton, (event) => { 
-    callbackFn(STORE.shoppingList, findIndexOfItem(event));
-    renderShoppingList();
+const checkWhichButton = (buttonLoc, typeOfButton, listToRender, callbackFn) => {
+  $(buttonLoc).on('click', typeOfButton, (event) => { 
+    if(callbackFn){
+      callbackFn(STORE.shoppingList, findIndexOfItem(event));
+      renderShoppingList(STORE.shoppingList);
+    } else { renderShoppingList(STORE.shoppingList); }
   });
 };
 // If user clicks check button, item is striked or unstriked.
-const handleCheckingItems = () => checkOrDeleteItem('.js-item-toggle', (database, index) => 
+const handleCheckingItems = () => checkWhichButton('.js-shopping-list', '.js-item-toggle', STORE.shoppingList, (database, index) => 
   database[index].checked = !database[index].checked);
 // If user clicks delete button, delete the item.
-const handleDeletingItems = () => checkOrDeleteItem('.js-item-delete', (database, index) => 
+const handleDeletingItems = () => checkWhichButton('.js-shopping-list', '.js-item-delete', STORE.shoppingList, (database, index) => 
   database.splice(index, 1));
 
 // USER STORY 5: User can press a switch/checkbox to toggle between displaying all items or unchecked items
 // makes a filtered shopping list
-//const filteredByUnchecked = () => ;
 
 const handleFilteringUncheckedItems= () => {
   console.log('`handleFilteringUncheckedItems` working');
+  console.log(createDOMList( STORE.filterChecked() ));
+  $('.js-buttons').on('click', '.js-filter-unchecked', (event) => { 
+    console.log('`handleFilteringUncheckedItems` items button works!');
+    renderShoppingList(STORE.filterChecked());
+  });
 };
+
+const handleAdvanceSorting = () => {
+  $('.js-buttons').on('click', '.js-advanced-sort', (event) => { 
+    console.log('`handleAdvanceSorting` items button works!');
+  });
+}
 
   // Handles all four USER STORIES.
 const handleShoppingList = () => {
-  renderShoppingList();
+  renderShoppingList(STORE.shoppingList);
   handleAddingItems();
   handleCheckingItems();
   handleDeletingItems();
   handleFilteringUncheckedItems();
+  handleAdvanceSorting();
 };
 
 // call handler when the DOM is ready
