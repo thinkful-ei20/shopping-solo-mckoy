@@ -67,20 +67,23 @@ const handleDeletingItems = () => checkWhichButton('.js-shopping-list', '.js-ite
   database.splice(index, 1));
 
 // USER STORY 5: User can press a switch/checkbox to toggle between displaying all items or unchecked items
+const replaceClassAndText = (currClass, newClass, text) => {
+  $(currClass).text(text);
+  $(currClass).removeClass().addClass(newClass);
+};
+
 const handleFilteringUncheckedItems= () => {
   $('.js-buttons').on('click', '.js-filter-unchecked', () => { 
     renderShoppingList(STORE.filterChecked());
-    $('.js-filter-unchecked').text('Show all items');
-    $('.js-filter-unchecked').removeClass().addClass('js-filter-checked');
+    replaceClassAndText('.js-filter-unchecked', 'js-filter-checked', 'Show all items');
   });
   $('.js-buttons').on('click', '.js-filter-checked', () => { 
     renderShoppingList(STORE.shoppingList);
-    $('.js-filter-checked').text('Show unchecked items');
-    $('.js-filter-checked').removeClass().addClass('js-filter-unchecked');
+    replaceClassAndText('.js-filter-checked', 'js-filter-unchecked', 'Show unchecked items');
   });
 };
 
-const createDOMForm = () => `
+const createAdvancedDOMForm = () => `
   <div class="js-advanced-forms">
     <form id="js-item-sort-form">
       <input type="radio" name="sort" value="alpha" class="js-advanced-unchecked"> Show items alphabetically
@@ -96,15 +99,13 @@ const createDOMForm = () => `
 
 const handleAdvanceSorting = () => {
   $('.js-buttons').on('click', '.js-advanced-unchecked', (event) => { 
-    console.log('`handleAdvanceSorting` items button works!');
-    $(event.target).closest('.shopping-item-controls').append(createDOMForm);
+    $(event.target).closest('.shopping-item-controls').append(createAdvancedDOMForm);
     $('.js-advanced-unchecked').find('.button-label').text('Clear advanced options');
     $('.js-advanced-unchecked').removeClass().addClass('js-advanced-checked');
   });
   $('.js-buttons').on('click', '.js-advanced-checked', (event) => { 
-    console.log('`handleAdvanceSorting` items button works!');
     $('.js-advanced-forms').remove();
-    $('.js-advanced-checked').find('.button-label').text('Advanced Options');
+    $('.js-advanced-checked').text('Advanced Options');
     $('.js-advanced-checked').removeClass().addClass('js-advanced-unchecked');
   });
 };
