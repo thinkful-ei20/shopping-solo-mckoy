@@ -1,13 +1,18 @@
 'use strict';
 // USER STORY 1: RENDER SHOPPING LIST TO DOM
 // creates a startup shopping list
-const STORE = [
-  {name: 'apples', checked: false},
-  {name: 'oranges', checked: false},
-  {name: 'milk', checked: true},
-  {name: 'bread', checked: false}
-];
-// creates an li element with item's name, buttons, classes, and attributes dubbed DOMItem
+const STORE = {
+  shoppingList: [
+    {name: 'apples', checked: false},
+    {name: 'oranges', checked: false},
+    {name: 'milk', checked: true},
+    {name: 'bread', checked: false}
+  ],
+  filterChecked: function(){
+    return this.shoppingList.filter(item => !item.checked);
+  }
+};
+// Creates an li element with item's name, buttons, classes, and attributes dubbed DOMItem.
 const createDOMItem = (item, index) => `
   <li class="js-item-index-element" data-item-index="${index}">
     <span class="shopping-item js-shopping-item ${item.checked ? 'shopping-item__checked' : ''}">${item.name}</span>
@@ -20,44 +25,46 @@ const createDOMItem = (item, index) => `
       </button>
     </div>
   </li>`;
-// maps through the array and creates a DOMItem for each item using `createDOMItem`
+// Maps through the shopping list and creates a DOMItem for each item.
 const createDOMList = arr => arr.map((item, index) => createDOMItem(item, index)).join('');
-// renders shoppingList to the DOM using `createDOMList`
-const renderShoppingList= () => { $('.js-shopping-list').html(createDOMList(STORE));};
+// Renders shopping list to the DOM using `createDOMList`.
+const renderShoppingList= () => { $('.js-shopping-list').html(createDOMList(STORE.shoppingList));};
 
 // USER STORY 2: ADD NEW SHOPPING LIST ITEM
-// gets new shoppingList submitted by user
+// Gets new shopping list item submitted by user.
 const getNewItem = () => $('.js-shopping-list-entry').val();
-// empties the submit form
+// Empties the submit form.
 const emptyForm = () => { $('.js-shopping-list-entry').val('');};
-// add new item to store
-const addItemToShoppingList = () => { STORE.push({name: getNewItem(), checked: false}); };
-// on clicking submit, an item provided by user is added to shopping list and rendered to the DOM
+// Adds new item to shopping list.
+const addItemToShoppingList = database => { database.push({name: getNewItem(), checked: false}); };
+// When clicking submit, an item provided by user is added to the shopping list and rendered to the DOM.
 const handleAddingItems = () => {
   $('#js-shopping-list-form').submit( (event) => {
     event.preventDefault();
-    addItemToShoppingList();
+    addItemToShoppingList(STORE.shoppingList);
     renderShoppingList();
     emptyForm();
   });
 };
 
 // USER STORY 3 & 4: CHECK OR DELETE ITEMS
-// returns the index of a clicked item
-const findIndexOfItem = (event) => $(event.target).closest('.js-item-index-element').data('item-index');
-// deletes or checks and item from the list based on button clicked and parameters given then re-renders the list
+// Returns the index of a clicked item
+const findIndexOfItem = event => $(event.target).closest('.js-item-index-element').data('itemIndex');
+// Listen for clicks on check or delete button then re-renders the shopping list to the DOM
 const checkOrDeleteItem = (typeOfButton, callbackFn) => {
   $('.js-shopping-list').on('click', typeOfButton, (event) => { 
-    callbackFn(findIndexOfItem(event));
+    callbackFn(STORE.shoppingList, findIndexOfItem(event));
     renderShoppingList();
   });
 };
-// if check button clicked, cross out the item
-const handleCheckingItems = () => checkOrDeleteItem('.js-item-toggle', index => STORE[index].checked = !STORE[index].checked);
-// if delete button clicked, delete the item
-const handleDeletingItems = () => checkOrDeleteItem('.js-item-delete', index => STORE.splice(index, 1));
+// If user clicks check button, item is striked or unstriked.
+const handleCheckingItems = () => checkOrDeleteItem('.js-item-toggle', (database, index) => 
+  database[index].checked = !database[index].checked);
+// If user clicks delete button, delete the item.
+const handleDeletingItems = () => checkOrDeleteItem('.js-item-delete', (database, index) => 
+  database.splice(index, 1));
 
-// handles all four USER STORIES
+  // Handles all four USER STORIES.
 const handleShoppingList = () => {
   renderShoppingList();
   handleAddingItems();
