@@ -54,9 +54,9 @@ const findIndexOfItem = event => $(event.target).closest('.js-item-index-element
 const checkWhichButton = (buttonLoc, typeOfButton, listToRender, callbackFn) => {
   $(buttonLoc).on('click', typeOfButton, (event) => { 
     if(callbackFn){
-      callbackFn(STORE.shoppingList, findIndexOfItem(event));
-      renderShoppingList(STORE.shoppingList);
-    } else { renderShoppingList(STORE.shoppingList); }
+      callbackFn(listToRender, findIndexOfItem(event));
+      renderShoppingList(listToRender);
+    } else { renderShoppingList(listToRender); }
   });
 };
 // If user clicks check button, item is striked or unstriked.
@@ -75,6 +75,14 @@ const handleFilteringUncheckedItems= () => {
   $('.js-buttons').on('click', '.js-filter-unchecked', (event) => { 
     console.log('`handleFilteringUncheckedItems` items button works!');
     renderShoppingList(STORE.filterChecked());
+    $('.js-filter-unchecked').text('Show all items');
+    $('.js-filter-unchecked').removeClass().addClass('js-filter-checked');
+  });
+  $('.js-buttons').on('click', '.js-filter-checked', (event) => { 
+    console.log('`filter checked` items button works!');
+    renderShoppingList(STORE.shoppingList);
+    $('.js-filter-checked').text('Show unchecked items');
+    $('.js-filter-checked').removeClass().addClass('js-filter-unchecked');
   });
 };
 
