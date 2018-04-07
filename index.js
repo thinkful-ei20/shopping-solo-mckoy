@@ -66,28 +66,34 @@ const handleCheckingItems = () => checkWhichButton('.js-shopping-list', '.js-ite
 const handleDeletingItems = () => checkWhichButton('.js-shopping-list', '.js-item-delete', STORE.shoppingList, (database, index) => 
   database.splice(index, 1));
 
-// USER STORY 5: User can press a switch/checkbox to toggle between displaying all items or unchecked items
-const replaceClassAndText = (currClass, newClass, text) => {
-  $(currClass).text(text);
-  $(currClass).removeClass().addClass(newClass);
+// USER STORY 5: FILTER BUTTONS
+// Replaces current given class (in dot form) which a new given class (no dot) and a new text message.
+const replaceClassAndText = (currDotClass, newNoDotClass, text) => {
+  $(currDotClass).text(text);
+  $(currDotClass).removeClass().addClass(newNoDotClass);
 };
 
+// Handles 'Show unchecked items'/'Show all items' button
 const handleFilteringUncheckedItems= () => {
+  // If user clicks on the 'Show unchecked items', a shopping list filtered by unchecked renders to the DOM and the button will now say 'Show all items'
   $('.js-buttons').on('click', '.js-filter-unchecked', () => { 
     renderShoppingList(STORE.filterChecked());
     replaceClassAndText('.js-filter-unchecked', 'js-filter-checked', 'Show all items');
   });
+  // If user clicks on the 'Show all items', the entire shopping list renders to the DOM and the button will now say 'Show all items'
   $('.js-buttons').on('click', '.js-filter-checked', () => { 
+    $('.js-advanced-forms').remove();
     renderShoppingList(STORE.shoppingList);
     replaceClassAndText('.js-filter-checked', 'js-filter-unchecked', 'Show unchecked items');
   });
 };
 
+// Creates two radio buttons and an input box for submitting searches
 const createAdvancedDOMForm = () => `
   <div class="js-advanced-forms">
     <form id="js-item-sort-form">
-      <input type="radio" name="sort" value="alpha" class="js-advanced-unchecked"> Show items alphabetically
-      <input type="radio" name="sort" value="deleted" class="js-advanced-unchecked"> Show deleted items
+      <input type="radio" name="sort" value="alpha" class="js-alpha-checked"> Show items alphabetically
+      <input type="radio" name="sort" value="deleted" class="js-sort-checked"> Show deleted items
     </form>
     <form id="js-item-search-form">
       <label for="shopping-list-entry">Search for an item</label>
@@ -97,27 +103,46 @@ const createAdvancedDOMForm = () => `
   </div>
 `;
 
-const handleAdvanceSorting = () => {
+// Handles 'Show advanced options'/'Clear advanced options' button
+const handleAdvancedOptionsButton = () => {
+  // If user clicks on the 'Show advanced options', a list of advanced options to the DOM and the button will now say 'Clear advanced options'
   $('.js-buttons').on('click', '.js-advanced-unchecked', (event) => { 
     $(event.target).closest('.shopping-item-controls').append(createAdvancedDOMForm);
     $('.js-advanced-unchecked').find('.button-label').text('Clear advanced options');
-    $('.js-advanced-unchecked').removeClass().addClass('js-advanced-checked');
+    $('.js-advanced-unchecked').removeClass('js-advanced-unchecked').addClass('js-advanced-checked');
   });
-  $('.js-buttons').on('click', '.js-advanced-checked', (event) => { 
+  // If user clicks on the 'Clear advanced options', the list of advanced options disappears and the button will now say 'Show advanced options'
+  $('.js-buttons').on('click', '.js-advanced-checked', () => { 
     $('.js-advanced-forms').remove();
-    $('.js-advanced-checked').text('Advanced Options');
-    $('.js-advanced-checked').removeClass().addClass('js-advanced-unchecked');
+    $('.js-advanced-checked').find('.button-label').text('Show advanced options');
+    $('.js-advanced-checked').removeClass('js-advanced-checked').addClass('js-advanced-unchecked');
   });
 };
 
-// Handles all four USER STORIES.
+
+const handleSortRadioButtons = () => {
+  console.log('`handleSortRadioButtons` works like a charm');
+  $('.js-buttons').on('click', '.js-alpha-checked', (event) => { 
+    console.log('`Show items alphabetically` button works like a charm');
+  });
+  $('.js-buttons').on('click', '.js-sort-checked', (event) => { 
+    console.log('`Show deleted items` button works like a charm');
+  });
+  // call a sort method on the shopping items
+  // render the new shopping list
+  // change 'Show unchecked items' to 'Show all items' (and classes)
+};
+
+
+// Handles all USER STORIES.
 const handleShoppingList = () => {
   renderShoppingList(STORE.shoppingList);
   handleAddingItems();
+  handleFilteringUncheckedItems();
+  handleAdvancedOptionsButton();
+  handleSortRadioButtons();
   handleCheckingItems();
   handleDeletingItems();
-  handleFilteringUncheckedItems();
-  handleAdvanceSorting();
 };
 
 // call handler when the DOM is ready
