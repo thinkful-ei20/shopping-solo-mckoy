@@ -6,8 +6,8 @@ const STORE = {
     {name: 'apples', checked: false},
     {name: 'oranges', checked: false},
     {name: 'milk', checked: true},
-    {name: 'bread', checked: false}
-  ],
+    {name: 'bread', checked: false}],
+  deletedItemsList: [],
   filterChecked: function(){
     return this.shoppingList.filter(item => !item.checked);
   },
@@ -67,8 +67,11 @@ const checkWhichButton = (buttonLoc, typeOfButton, listToRender, callbackFn) => 
 const handleCheckingItems = () => checkWhichButton('.js-shopping-list', '.js-item-toggle', STORE.shoppingList, (database, index) => 
   database[index].checked = !database[index].checked);
 // If user clicks delete button, delete the item.
-const handleDeletingItems = () => checkWhichButton('.js-shopping-list', '.js-item-delete', STORE.shoppingList, (database, index) => 
-  database.splice(index, 1));
+const handleDeletingItems = () => checkWhichButton('.js-shopping-list', '.js-item-delete', STORE.shoppingList, (database, index) => {
+  STORE.deletedItemsList.push(database.slice().splice(index, 1)[0]);
+  console.log(STORE.deletedItemsList);
+  return database.splice(index, 1);
+});
 
 // USER STORY 5: FILTER BUTTONS
 // Replaces current given class (in dot form) which a new given class (no dot) and a new text message.
@@ -134,7 +137,6 @@ const handleAdvancedOptionsButton = () => {
 
 // Handles 'Show items alphabetically'/'Show deleted items' radio buttons
 const handleSortRadioButtons = () => {
-  console.log('`handleSortRadioButtons` works like a charm');
   // If user clicks on the 'Show items alphabetically', a shopping list sorted alphabetically renders to the DOM and the button will now say 'Clear advanced options'
   $('.js-buttons').on('click', '.js-alpha-checked', (event) => { 
     renderShoppingList(STORE.filterAlpha());
@@ -142,6 +144,8 @@ const handleSortRadioButtons = () => {
   });
   $('.js-buttons').on('click', '.js-sort-checked', (event) => { 
     console.log('`Show deleted items` button works like a charm');
+    renderShoppingList(STORE.deletedItemsList);
+    replaceClassAndText('.js-filter-unchecked', 'js-filter-checked', 'Show items in original order');
   });
   // change 'Show unchecked items' to 'Show all items' (and classes)
 };
