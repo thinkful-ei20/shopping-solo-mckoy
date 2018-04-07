@@ -10,7 +10,11 @@ const STORE = {
   ],
   filterChecked: function(){
     return this.shoppingList.filter(item => !item.checked);
-  }
+  },
+  filterAlpha: function(){
+    return this.shoppingList.slice().sort((a,b) => a.name>b.name);
+  },
+  filterDeleted: () => {}
 };
 // Creates an li element with item's name, buttons, classes, and attributes dubbed DOMItem.
 const createDOMItem = (item, index) => `
@@ -75,10 +79,16 @@ const replaceClassAndText = (currDotClass, newNoDotClass, text) => {
 
 // Handles 'Show unchecked items'/'Show all items' button
 const handleFilteringUncheckedItems= () => {
-  // If user clicks on the 'Show unchecked items', a shopping list filtered by unchecked renders to the DOM and the button will now say 'Show all items'
-  $('.js-buttons').on('click', '.js-filter-unchecked', () => { 
-    renderShoppingList(STORE.filterChecked());
-    replaceClassAndText('.js-filter-unchecked', 'js-filter-checked', 'Show all items');
+  const buttonText = $('.js-filter-unchecked').find('.button-label').text();
+  $('.js-buttons').on('click', '.js-filter-unchecked', () => {
+    // If user clicks on the 'Show unchecked items', a shopping list filtered by unchecked renders to the DOM and the button will now say 'Show all items' 
+    if (buttonText==='Show unchecked items') {
+      renderShoppingList(STORE.filterChecked());
+      replaceClassAndText('.js-filter-unchecked', 'js-filter-checked', 'Show all items');
+    } else {
+      // If user clicks on the 'Show items in original order', the original shopping list renders to the DOM and the button will now say 'Show unchecked items'
+      renderShoppingList(STORE.shoppingList);
+    }
   });
   // If user clicks on the 'Show all items', the entire shopping list renders to the DOM and the button will now say 'Show all items'
   $('.js-buttons').on('click', '.js-filter-checked', () => { 
@@ -105,11 +115,14 @@ const createAdvancedDOMForm = () => `
 
 // Handles 'Show advanced options'/'Clear advanced options' button
 const handleAdvancedOptionsButton = () => {
+  const buttonText = $('.js-advanced-unchecked').find('.button-label').text();
   // If user clicks on the 'Show advanced options', a list of advanced options to the DOM and the button will now say 'Clear advanced options'
-  $('.js-buttons').on('click', '.js-advanced-unchecked', (event) => { 
-    $(event.target).closest('.shopping-item-controls').append(createAdvancedDOMForm);
-    $('.js-advanced-unchecked').find('.button-label').text('Clear advanced options');
-    $('.js-advanced-unchecked').removeClass('js-advanced-unchecked').addClass('js-advanced-checked');
+  $('.js-buttons').on('click', '.js-advanced-unchecked', (event) => {
+    if (buttonText==='Show advanced options') {
+      $(event.target).closest('.shopping-item-controls').append(createAdvancedDOMForm);
+      $('.js-advanced-unchecked').find('.button-label').text('Clear advanced options');
+      $('.js-advanced-unchecked').removeClass('js-advanced-unchecked').addClass('js-advanced-checked');
+    }
   });
   // If user clicks on the 'Clear advanced options', the list of advanced options disappears and the button will now say 'Show advanced options'
   $('.js-buttons').on('click', '.js-advanced-checked', () => { 
@@ -119,17 +132,17 @@ const handleAdvancedOptionsButton = () => {
   });
 };
 
-
+// Handles 'Show items alphabetically'/'Show deleted items' radio buttons
 const handleSortRadioButtons = () => {
   console.log('`handleSortRadioButtons` works like a charm');
+  // If user clicks on the 'Show items alphabetically', a shopping list sorted alphabetically renders to the DOM and the button will now say 'Clear advanced options'
   $('.js-buttons').on('click', '.js-alpha-checked', (event) => { 
-    console.log('`Show items alphabetically` button works like a charm');
+    renderShoppingList(STORE.filterAlpha());
+    replaceClassAndText('.js-filter-unchecked', 'js-filter-checked', 'Show items in original order');
   });
   $('.js-buttons').on('click', '.js-sort-checked', (event) => { 
     console.log('`Show deleted items` button works like a charm');
   });
-  // call a sort method on the shopping items
-  // render the new shopping list
   // change 'Show unchecked items' to 'Show all items' (and classes)
 };
 
