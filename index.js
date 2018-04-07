@@ -27,6 +27,9 @@ const createDOMItem = (item, index) => `
       <button class="shopping-item-delete js-item-delete">
         <span class="button-label">delete</span>
       </button>
+      <button class="shopping-item-edit js-item-edit">
+        <span class="button-label">edit</span>
+      </button>
     </div>
   </li>`;
 // Maps through the shopping list and creates a DOMItem for each item.
@@ -69,7 +72,6 @@ const handleCheckingItems = () => checkWhichButton('.js-shopping-list', '.js-ite
 // If user clicks delete button, delete the item.
 const handleDeletingItems = () => checkWhichButton('.js-shopping-list', '.js-item-delete', STORE.shoppingList, (database, index) => {
   STORE.deletedItemsList.push(database.slice().splice(index, 1)[0]);
-  console.log(STORE.deletedItemsList);
   return database.splice(index, 1);
 });
 
