@@ -65,6 +65,10 @@ display-container:hover {
   font: inherit;
   margin: inherit;
 }
+.btn:hover {
+  color: #000;
+  background-color: #fff;
+}
 .black {
   color: #fff;
   background-color: #000;
