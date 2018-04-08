@@ -3,13 +3,14 @@
 // Creates a database to store shopping list and 
 // methods to call on the shopping list.
 const STORE = {
-  stateOfStore: [
-    {name: 'unsortedShoppingList', state: false},
-    {name: 'filterChecked', state: false},
-    {name: 'filterAlpha', state: false},
-    {name: 'editChecked', state: false},
-    {name: 'advancedDisplayed', state: false}
-  ],
+  currentState: {
+    unsortedShoppingList: true,
+    filterChecked: false,
+    filterAlpha: false,
+    currentlyEditing: false,
+    deletedChecked: false,
+    advancedDisplayed: false
+  },
   // Stores an start-up shopping list of items, 
   // each with a item name and whether or not this item has been checked.
   // New items added in the DOM are stored in this list. 
@@ -155,19 +156,33 @@ const handleFilteringUncheckedItems= () => {
     if (buttonText==='Show unchecked items') {
       renderShoppingList(STORE.filterChecked());
       replaceClassAndText('.js-filter-unchecked', 'js-filter-checked', 'Show all items');
+      STORE.currentState.filterChecked = true;
+      STORE.currentState.unsortedShoppingList = false;
     } else {
-      // If user clicks on the 'Show items in original order', the original shopping list renders to the DOM 
+      // If user sees and clicks on the 'Show all items', 
+      // the entire shopping list renders to the DOM and 
+      // the button will now say 'Show unchecked items'
+      // If user sees and clicks on the 'Show items in original order', 
+      // the original shopping list renders to the DOM 
       // and the button will now say 'Show unchecked items'.
       renderShoppingList(STORE.shoppingList);
+      STORE.currentState.filterChecked = false;
+      STORE.currentState.filterAlpha = false;
+      STORE.currentState.filterByName = false;
+      STORE.currentState.filterDeleted = false;
+      STORE.currentState.unsortedShoppingList = true;
     }
   });
-  // If user clicks on the 'Show all items', 
-  // the entire shopping list renders to the DOM and 
-  // the button will now say 'Show all items'
   $('.js-buttons').on('click', '.js-filter-checked', () => { 
     $('.js-advanced-forms').remove();
     renderShoppingList(STORE.shoppingList);
     replaceClassAndText('.js-filter-checked', 'js-filter-unchecked', 'Show unchecked items');
+    STORE.currentState.filterChecked = false;
+    STORE.currentState.filterAlpha = false;
+    STORE.currentState.filterByName = false;
+    STORE.currentState.filterDeleted = false;
+    STORE.currentState.deletedChecked = false;
+    STORE.currentState.unsortedShoppingList = true;
   });
 };
 
@@ -187,7 +202,7 @@ const createAdvancedDOMForm = () => `
 
 // Handles 'Show advanced options'/'Clear advanced options' button
 const handleAdvancedOptionsButton = () => {
-  const buttonText = $('.js-advanced-unchecked').find('.button-label').text();
+  let buttonText = $('.js-advanced-unchecked').find('.button-label').text();
   // If user clicks on the 'Show advanced options', a list of advanced options is rendered to the DOM 
   // and the button will now say 'Clear advanced options'
   $('.js-buttons').on('click', '.js-advanced-unchecked', (event) => {
@@ -195,7 +210,12 @@ const handleAdvancedOptionsButton = () => {
       $(event.target).closest('.shopping-item-controls').append(createAdvancedDOMForm);
       $('.js-advanced-unchecked').find('.button-label').text('Clear advanced options');
       $('.js-advanced-unchecked').removeClass('js-advanced-unchecked').addClass('js-advanced-checked');
-    }
+      STORE.currentState.advancedDisplayed = true;
+    } else if ($('button').hasClass('js-advanced-checked') && $('.js-advanced-forms').val()===undefined) {
+      $('.js-advanced-checked').find('.button-label').text('Show advanced options');
+      $('.js-advanced-checked').removeClass('js-advanced-checked').addClass('js-advanced-unchecked');
+      STORE.currentState.advancedDisplayed = false;
+    } 
   });
   // If user clicks on the 'Clear advanced options', the list of advanced options disappears 
   // and the button will now say 'Show advanced options'
@@ -203,6 +223,7 @@ const handleAdvancedOptionsButton = () => {
     $('.js-advanced-forms').remove();
     $('.js-advanced-checked').find('.button-label').text('Show advanced options');
     $('.js-advanced-checked').removeClass('js-advanced-checked').addClass('js-advanced-unchecked');
+    STORE.currentState.advancedDisplayed = false;
   });
 };
 
@@ -217,6 +238,9 @@ const handleSortAlphaDeletedAndSearch = () => {
     $('.js-advanced-forms').remove();
     $('.js-advanced-checked').find('.button-label').text('Show advanced options');
     $('.js-advanced-checked').removeClass('js-advanced-checked').addClass('js-advanced-unchecked');
+    STORE.currentState.filterAlpha = true;
+    STORE.currentState.unsortedShoppingList = false;
+    STORE.currentState.advancedDisplayed = false;
   });
   // If user clicks on the 'Show items alphabetically', 
   // a shopping list sorted alphabetically renders to the DOM and 
@@ -227,20 +251,30 @@ const handleSortAlphaDeletedAndSearch = () => {
     $('.js-advanced-forms').remove();
     $('.js-advanced-checked').find('.button-label').text('Show advanced options');
     $('.js-advanced-checked').removeClass('js-advanced-checked').addClass('js-advanced-unchecked');
+    STORE.currentState.deletedChecked = true;
+    STORE.currentState.unsortedShoppingList = false;
+    STORE.currentState.advancedDisplayed = false;
   });
   // When user types into the search field
   $('.js-buttons').on('keyup', '.js-item-search-entry', event => {
+    STORE.searchName = $(event.target).val().toLowerCase();
     renderShoppingList(STORE.filterByName($(event.target).val().toLowerCase()));
+    STORE.currentState.filterByName = (STORE.searchName) ? true : false;
+    STORE.currentState.unsortedShoppingList = false;
   });
 };
 
 const handleEditingItems = () => {
   $('.js-shopping-list').on('click', '.js-item-edit', event => {
     $(event.target).closest('li').html(createDOMEditItem());
+    STORE.currentState.currentlyEditing = true;
+    STORE.currentState.unsortedShoppingList = false;
   });
   $('.js-shopping-list').on('click', '.js-item-edited', () => {
     STORE.shoppingList.splice(findIndexOfItem('.js-item-edited'), 1, {name: getNewItem('.js-edit-list-entry'), checked: false});
     renderShoppingList(STORE.shoppingList);
+    STORE.currentState.currentlyEditing = false;
+    STORE.currentState.unsortedShoppingList = true;
   });
 };
 
