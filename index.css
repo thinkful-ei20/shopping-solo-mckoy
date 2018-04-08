@@ -50,8 +50,16 @@ display-container:hover {
   top: 0;
   left: 0;
 };
+.display-topright {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
 .xlg {
   font-size: 24px;
+}
+.lg {
+  font-size: 18px;
 }
 .btn {
   user-select: none;
@@ -72,6 +80,60 @@ display-container:hover {
 .black {
   color: #fff;
   background-color: #000;
+}
+.modal {
+  z-index: 3;
+  padding-top: 100px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0,0,0, 0.5);
+}
+.modal-content {
+  margin: auto;
+  background-color: #fff;
+  position: relative;
+  padding: 0;
+  outline: 0;
+  width: 600px;
+}
+@media (min-width: 993px) {
+  .modal {
+    padding-top: 30px;
+  }
+  .modal-content {
+    margin: 0 10px;
+    width: auto;
+  }
+}
+@media (max-width: 600px) {
+  .modal {
+    padding-top: 30px;
+  }
+  .modal-content {
+    margin: 0 10px;
+    width: auto;
+  }
+}
+@media (max-width: 768px) {
+  .modal {
+    padding-top: 50px;
+  }
+  .modal-content {
+    width: 500px;
+  }
+}
+@media (min-width: 993px) {
+  .modal-content {
+    width: 900px;
+    margin: 0 auto;
+  }
+  .hide-large {
+    display: none;
+  }
 }
 
 .container {

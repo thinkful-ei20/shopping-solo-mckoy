@@ -3,8 +3,8 @@
 
 <head>
     <title>Shopping List</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css">
     <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    <link rel="stylesheet" href="https://necolas.github.io/normalize.css/8.0.0/normalize.css">
     <link rel="stylesheet" href="index.css">
 </head>
 
@@ -17,6 +17,37 @@
         <div class="display-topleft container xlg">
             <p><button class="btn black">get started making your list</button></p>
             <p><button class="btn black">learn how it works</button></p>
+        </div>
+    </div>
+    <div id="start-list" class="modal">
+        <div class="modal-content">
+            <div class="container black display-container">
+                <span class="btn display-topright lg">x</span>
+                <h1>Add an item here</h1>
+            </div>
+            <div class="container">
+                <form id="js-shopping-list-form">
+                    <label for="shopping-list-entry">Add an item</label>
+                    <input type="text" name="shopping-list-entry" class="js-shopping-list-entry" placeholder="e.g., soap">
+                    <button type="submit">Add item</button>
+                </form>
+                <div class="js-buttons">
+                    <div class="shopping-item-controls">
+                        <button class="shopping-item-toggle js-filter-unchecked">
+                            <span class="button-label">Show unchecked items</span>
+                        </button>
+                        <button class="shopping-item-toggle js-advanced-unchecked">
+                            <span class="button-label" class="js-advanced-unchecked">Show advanced options</span>
+                        </button>
+                    </div>
+                </div>                
+            </div>
+            <div class="container black">
+                <h1>Current Shopping List</h1>
+            </div>
+            <div class="container">
+                <ul class="shopping-list js-shopping-list"></ul>
+            </div>
         </div>
     </div>
     <!--
