@@ -7,6 +7,7 @@ const STORE = {
     unsortedShoppingList: true,
     filterChecked: false,
     filterAlpha: false,
+    filterByName: false,
     currentlyEditing: false,
     deletedChecked: false,
     advancedDisplayed: false
