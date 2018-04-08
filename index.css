@@ -1,17 +1,77 @@
-* {
+*, *:before, *:after {
   box-sizing: border-box;
 }
-
+html {
+  height: 100%;
+}
 body {
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Raleway', sans-serif;
+  margin: 0;
+  height: 100%;
+  font-size: 20px;
+  line-height: 1.5;
+}
+div {
+  display: block;
 }
 
-button, input[type="text"] {
-  padding: 5px;
+.background-img {
+  background-image: url('https://www.w3schools.com/w3images/onepage_restaurant.jpg');
+  min-height: 100%;
+  background-position: center;
+  background-size: cover;
 }
-
-button:hover {
+.text-white {
+  color: #fff;
+}
+hover-text-white:hover {
+  color: #fff;
+}
+.display-container {
+  position: relative;
+}
+display-container:hover {
+  display: block;
+}
+.jumbo {
+  font-size: 64px;
+}
+.display-middle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.title {
+  text-align: center;
+}
+.display-topleft {
+  position: absolute;
+  top: 0;
+  left: 0;
+};
+.xlg {
+  font-size: 24px;
+}
+.btn {
+  user-select: none;
+  border: none;
+  display: inline-block;
+  padding: 8px 16px;
+  vertical-align: middle;
+  text-decoration: none;
+  text-align: center;
   cursor: pointer;
+  font: inherit;
+  margin: inherit;
+}
+.black {
+  color: #fff;
+  background-color: #000;
+}
+
+.container {
+  padding: 0.01em 16px;
 }
 
 .hidden {
@@ -20,11 +80,6 @@ button:hover {
 
 #shopping-list-item {
   width: 250px;
-}
-
-.container {
-  max-width: 600px;
-  margin: 0 auto;
 }
 
 .shopping-list {
