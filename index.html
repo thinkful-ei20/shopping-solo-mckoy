@@ -15,24 +15,24 @@
             <p class="title">A McKoy Production</p>
         </div>
         <div class="display-topleft container xlg">
-            <p><button class="btn black">get started making your list</button></p>
-            <p><button class="btn black">learn how it works</button></p>
+            <p><button class="start-btn btn black">get started making your list</button></p>
+            <p><button class="info-btn btn black">learn how it works</button></p>
         </div>
     </div>
-    <div id="start-list" class="modal">
+    <div id="start-list" class="modal hidden">
         <div class="modal-content">
             <div class="container black display-container">
                 <h1>Add an item here</h1>
                 <span class="btn display-topright lg" id="home-btn">back to home</span>
             </div>
             <div class="container">
-                <div class="">
+                <div class="opts">
                     <form id="js-shopping-list-form">
                         <input type="text" name="shopping-list-entry" class="inputBox js-shopping-list-entry" placeholder="e.g., soap">
                         <button type="submit" class="btn black" id="add-btn">Add item</button>
                     </form>
                     <div class="js-buttons">
-                        <div class="shopping-item-controls" id="sort-btns">
+                        <div class="shopping-item-controls sort-btns">
                             <button class="shopping-item-toggle btn black js-filter-unchecked" id="fil-checked">
                                 <span class="button-label">Show unchecked items</span>
                             </button>
@@ -52,6 +52,31 @@
             </div>
         </div>
     </div>
+    <div id="info" class="modal hidden">
+        <div class="modal-content">
+            <div class="container black display-container">
+                <h1>With this app, you can...</h1>
+                <span class="btn display-topright lg" id="info-home-btn">back to home</span>
+            </div>
+            <div class="container">
+                <h5>Add, edit or delete an item.</h5>
+                <h5>Check or uncheck an item.</h5>
+                <h5>Show all items that were not checked.</h5>
+                <h5>Show all items sorted alphabetically.</h5>
+                <h5>Show all items that were deleted.</h5>
+                <h5>Search for items by what you type in the search field.</h5>
+            </div>
+            <div class="container black">
+                <h1>But you cannot...</h1>
+            </div>
+            <div class="container">
+                <h5>Save your shopping list when you leave this page.</h5>
+            </div>
+            <div class="container black">
+                <h1>At least you can't yet...keep checking for updates!</h1>
+            </div>
+        </div>
+        </div>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script type="text/javascript" src="index.js"></script>
 </body>

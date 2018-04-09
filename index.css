@@ -25,6 +25,9 @@ form {
   display: flex;
   justify-content: space-around;
 }
+.opts {
+
+}
 
 .background-img {
   background-image: url('https://www.w3schools.com/w3images/onepage_restaurant.jpg');
@@ -97,14 +100,19 @@ hover-text-white:hover {
 }
 #fil-checked, #adv-opts {
   margin: 10px;
+  width: 50%;
 }
-#home-btn {
+#home-btn, #info-home-btn {
   height: 50px;
 }
 
-#sort-btns {
+.sort-btns {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+}
+
+div.shopping-item-controls.sort-btns {
+  width: 100%;
 }
 .black {
   color: #fff;

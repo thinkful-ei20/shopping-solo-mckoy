@@ -40,13 +40,13 @@ const createDOMItem = (item, index) => `
   <li class="js-item-index-element" data-item-index="${index}">
     <span class="shopping-item js-shopping-item ${item.checked ? 'shopping-item__checked' : ''}">${item.name}</span>
     <div class="shopping-item-controls">    
-      <button class="shopping-item-toggle js-item-toggle">
+      <button class="shopping-item-toggle btn black js-item-toggle">
         <span class="button-label">check</span>
       </button>
-      <button class="shopping-item-delete js-item-delete">
+      <button class="shopping-item-delete btn black js-item-delete">
         <span class="button-label">delete</span>
       </button>
-      <button class="shopping-item-edit js-item-edit">
+      <button class="shopping-item-edit btn black js-item-edit">
         <span class="button-label">edit</span>
       </button>
     </div>
@@ -59,13 +59,13 @@ const createDOMEditItem = () => `
     </form>
   </span>
   <div class="shopping-item-controls">
-    <button class="shopping-item-toggle js-item-toggle">
+    <button class="shopping-item-toggle btn black js-item-toggle">
       <span class="button-label">check</span>
     </button>
-    <button class="shopping-item-delete js-item-delete">
+    <button class="shopping-item-delete btn black js-item-delete">
       <span class="button-label">delete</span>
     </button>
-    <button class="shopping-item-edited js-item-edited">
+    <button class="shopping-item-edited btn black js-item-edited">
       <span class="button-label">submit change</span>
     </button>
   </div>`;
@@ -156,7 +156,7 @@ const handleFilteringUncheckedItems= () => {
     // renders to the DOM and the button will now say 'Show all items'.
     if (buttonText==='Show unchecked items') {
       renderShoppingList(STORE.filterChecked());
-      replaceClassAndText('.js-filter-unchecked', 'js-filter-checked', 'Show all items');
+      replaceClassAndText('.js-filter-unchecked', 'btn black js-filter-checked', 'Show all items');
       STORE.currentState.filterChecked = true;
       STORE.currentState.unsortedShoppingList = false;
     } else {
@@ -177,7 +177,7 @@ const handleFilteringUncheckedItems= () => {
   $('.js-buttons').on('click', '.js-filter-checked', () => { 
     $('.js-advanced-forms').remove();
     renderShoppingList(STORE.shoppingList);
-    replaceClassAndText('.js-filter-checked', 'js-filter-unchecked', 'Show unchecked items');
+    replaceClassAndText('.js-filter-checked', 'btn black js-filter-unchecked', 'Show unchecked items');
     STORE.currentState.filterChecked = false;
     STORE.currentState.filterAlpha = false;
     STORE.currentState.filterByName = false;
@@ -235,7 +235,7 @@ const handleSortAlphaDeletedAndSearch = () => {
   // the button will now say 'Clear advanced options'
   $('.js-buttons').on('click', '.js-alpha-checked', (event) => { 
     renderShoppingList(STORE.filterAlpha());
-    replaceClassAndText('.js-filter-unchecked', 'js-filter-checked', 'Show items in original order');
+    replaceClassAndText('.js-filter-unchecked', 'btn black js-filter-checked', 'Show items in original order');
     $('.js-advanced-forms').remove();
     $('.js-advanced-checked').find('.button-label').text('Show advanced options');
     $('.js-advanced-checked').removeClass('js-advanced-checked').addClass('js-advanced-unchecked');
@@ -279,8 +279,25 @@ const handleEditingItems = () => {
   });
 };
 
+// Handles get started button
+const handleStartButton = () => {
+  $('.container').on('click', '.start-btn', (event) => {
+    $('#start-list').toggleClass('hidden');
+  });
+  $('.container').on('click', '#home-btn', (event) => {
+    $('#start-list').toggleClass('hidden');
+  });
+  $('.container').on('click', '.info-btn', (event) => {
+    $('#info').toggleClass('hidden');
+  });
+  $('.container').on('click', '#info-home-btn', (event) => {
+    $('#info').toggleClass('hidden');
+  });
+};
+
 // Handles all USER STORIES.
 const handleShoppingList = () => {
+  handleStartButton();
   renderShoppingList(STORE.shoppingList);
   handleAddingItems();
   handleFilteringUncheckedItems();
